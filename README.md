@@ -37,7 +37,7 @@ Options
 Builder
 -------
 ```
-go build github.com/imneov/siphon/siphon
+go build github.com/juviliu/siphon/siphon
 ```
 
 Example

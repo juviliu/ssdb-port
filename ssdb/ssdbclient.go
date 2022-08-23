@@ -3,8 +3,8 @@ package ssdb
 import (
 	"bufio"
 	"bytes"
+	"errors"
 	"fmt"
-	"github.com/seefan/goerr"
 	"net"
 	"strconv"
 	log "github.com/thinkboy/log4go"
@@ -91,13 +91,13 @@ func (s *SSDBClient) Do(args ...interface{}) ([]string, error) {
 		if err != nil {
 			s.sock.Close()
 			s.isOpen = false
-			return nil, goerr.NewError(err, "authentication failed")
+			return nil, errors.New("authentication failed")
 		}
 		if len(resp) > 0 && resp[0] == "ok" {
 			//验证成功
 			s.Password = ""
 		} else {
-			return nil, goerr.New("Authentication failed,password is wrong")
+			return nil, errors.New("Authentication failed,password is wrong")
 		}
 	}
 	resp, err := s.do(args...)

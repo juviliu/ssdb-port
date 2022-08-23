@@ -1,6 +1,7 @@
 package ssdb
 
 import (
+	"errors"
 	log "github.com/thinkboy/log4go"
 	"fmt"
 	"time"
@@ -203,6 +204,13 @@ func (s *SSDBSalve) connectToMaster() (err error) {
 		log.Error("[%s] failed to connect to master:%s (%v)", s.id, s.from, err)
 		return
 	}
+	defer func() {
+		if err != nil {
+			s.c.Close()
+			s.c = nil
+		}
+	}()
+
 	s.status = SALVESTATUS_INIT
 	s.connectRetry = 0
 
@@ -212,6 +220,13 @@ func (s *SSDBSalve) connectToMaster() (err error) {
 			log.Error("Auth error(%v)", err)
 			return
 		}
+		rsp, err := s.c.Recv()
+		if err != nil || len(rsp) != 2 || rsp[0] != "ok" {
+			log.Error("Recv auth response (%v) error(%v)", rsp ,err)
+			err = fmt.Errorf("Recv auth response [%v] error:%v ", rsp ,err)
+			return err
+		}
+
 	}
 
 	//开始同步命令

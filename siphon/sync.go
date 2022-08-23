@@ -9,7 +9,7 @@ import (
 	"github.com/reborndb/go/atomic2"
 	"github.com/reborndb/go/log"
 	redis "github.com/garyburd/redigo/redis"
-	ssdb "github.com/imneov/siphon/ssdb"
+	ssdb "github.com/imneov/juviliu/ssdb"
 	"fmt"
 	"runtime"
 )
